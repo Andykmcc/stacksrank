@@ -1,9 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import process from 'node:process'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "@vite-pwa/nuxt"],
+  modules: [
+    "@nuxt/ui", 
+    "@vite-pwa/nuxt",
+    "nuxt3-localforage",
+  ],
+  vite: {
+    optimizeDeps: {
+      include: ['localforage'],
+    },
+  },
   compatibilityDate: "2024-10-25",
   imports: {
     autoImport: true,
@@ -57,4 +65,15 @@ export default defineNuxtConfig({
       installPrompt: true,
     },
   },
+  localForage: {
+    name: "stacksrank",
+    version: 1,
+    instances: [{
+      name: 'stacksrank',
+      storeName: 'users'
+    }, {
+      name: 'stacksrank',
+      storeName: 'stacks'
+    }]
+  }
 })

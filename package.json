@@ -18,6 +18,11 @@
     "bloom-filters": "^3.0.2",
     "fuse.js": "^7.0.0",
     "nuxt": "^3.13.2",
+    "nuxt3-localforage": "^0.1.2",
     "papaparse": "^5.4.1"
+  },
+  "dependencies": {
+    "dexie": "^4.0.9",
+    "vue-draggable-plus": "^0.5.4"
   }
 }
