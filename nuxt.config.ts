@@ -1,17 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  ssr: false,
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true
+    }
+  },
   modules: [
     "@nuxt/ui", 
     "@vite-pwa/nuxt",
-    "nuxt3-localforage",
   ],
-  vite: {
-    optimizeDeps: {
-      include: ['localforage'],
-    },
-  },
   compatibilityDate: "2024-10-25",
   imports: {
     autoImport: true,
@@ -65,15 +66,4 @@ export default defineNuxtConfig({
       installPrompt: true,
     },
   },
-  localForage: {
-    name: "stacksrank",
-    version: 1,
-    instances: [{
-      name: 'stacksrank',
-      storeName: 'users'
-    }, {
-      name: 'stacksrank',
-      storeName: 'stacks'
-    }]
-  }
 })
