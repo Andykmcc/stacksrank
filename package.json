@@ -13,12 +13,10 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxt/ui": "^2.18.7",
+    "@pinia/nuxt": "^0.7.0",
     "@vite-pwa/assets-generator": "^0.2.6",
     "@vite-pwa/nuxt": "^0.10.5",
-    "bloom-filters": "^3.0.2",
-    "fuse.js": "^7.0.0",
-    "nuxt": "^3.13.2",
-    "papaparse": "^5.4.1"
+    "nuxt": "^3.13.2"
   },
   "dependencies": {
     "dexie": "^4.0.9",

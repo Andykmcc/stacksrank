@@ -9,10 +9,7 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
-  modules: [
-    "@nuxt/ui", 
-    "@vite-pwa/nuxt",
-  ],
+  modules: ["@nuxt/ui", "@vite-pwa/nuxt", "@pinia/nuxt"],
   compatibilityDate: "2024-10-25",
   imports: {
     autoImport: true,

@@ -52,7 +52,8 @@
     page: 0,
     fields: 'title,author_name,key,publish_year',
   };
-  const {data: currentUser} = await useUser();
+
+  const stackStore = useStacksStore();
 
   async function search(q: string) {
     if (query.value !== '') {
@@ -73,9 +74,17 @@
     return [];
   }
 
-  watch(selected, (selectedWork) => {
-    if (selectedWork && currentUser.value) {
-      console.log(`Add ${selectedWork.title} to ${currentUser.value.id} stack.`);
+  const any = (arr:any[], fn = Boolean) => arr.some(fn);
+  function callIfTruthy(func:Function, ...args:any[]) {
+    if (arguments.length > 1) {
+      return func(...args);
     }
-  });
+    return function (...args:any[]) {
+      if (any([...args])) {
+        return func(...args);
+      }
+    }
+  }
+
+  watch(selected, callIfTruthy(stackStore.addItem));
 </script>
