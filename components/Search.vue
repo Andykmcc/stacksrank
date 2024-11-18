@@ -14,10 +14,11 @@
     searchLazy
     name="search"
     by="key"
+    class="mb-2"
   >
     <template #option="{ option: book }">
       <span class="font-semibold truncate">{{ book.title }}</span>
-      <span class="truncate">{{ book.author_name[0] }}</span>
+      <span class="truncate italic">{{ book.author_name[0] }}</span>
     </template>
     <template #option-empty="{ query }">
       Searching...
@@ -79,7 +80,7 @@
     if (arguments.length > 1) {
       return func(...args);
     }
-    return function (...args:any[]) {
+    return async function (...args:any[]) {
       if (any([...args])) {
         return func(...args);
       }

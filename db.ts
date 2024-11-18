@@ -29,8 +29,7 @@ export const db = new Dexie('StacksRank') as Dexie & {
   >;
   stacks: EntityTable<
     Stack,
-    'id',
-    'user_id'
+    'id'
   >;
   works: EntityTable<
     Work,

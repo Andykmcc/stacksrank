@@ -1,5 +1,5 @@
 <template>
-  <span class="h-4 inline-block" v-if="currentUser">Account current user id: {{ currentUser.id }}</span>
+  <span class="h-4 inline-block" v-if="currentUser">Account: {{ currentUser.id }}</span>
   <div v-else>
     <USkeleton class="h-4 w-[75px] mr-4 inline-block" />
     <USkeleton class="h-4 w-[75px] mr-4 inline-block" />
