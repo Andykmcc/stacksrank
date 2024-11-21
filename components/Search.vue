@@ -54,6 +54,7 @@
     fields: 'title,author_name,key,publish_year',
   };
 
+  const userStore = useUsersStore();
   const stackStore = useStacksStore();
 
   async function search(q: string) {
@@ -75,17 +76,25 @@
     return [];
   }
 
-  const any = (arr:any[], fn = Boolean) => arr.some(fn);
   function callIfTruthy(func:Function, ...args:any[]) {
-    if (arguments.length > 1) {
-      return func(...args);
-    }
-    return async function (...args:any[]) {
-      if (any([...args])) {
+    return async (...args:any[]) => {
+      if (args[0]) {
+        console.log(...args);
         return func(...args);
       }
     }
   }
 
   watch(selected, callIfTruthy(stackStore.addItem));
+  
+  userStore.$onAction(({name}) => {
+    switch(name) {
+      case 'logout':
+        selected.value = undefined;
+        query.value = '';
+        break;
+      default:
+        break;
+    }
+  });
 </script>

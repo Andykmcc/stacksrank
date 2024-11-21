@@ -1,4 +1,5 @@
 import { db, type Work, type User } from '../db';
+import {type DexieError } from 'dexie';
 import { toRaw } from 'vue';
 
 export const useStacksStore = defineStore('stack', {
@@ -16,27 +17,30 @@ export const useStacksStore = defineStore('stack', {
     async updateStackFromStorage(userId:User['id']) {
       const userStack = await db.stacks.where({'user_id': userId}).first();
       if (userStack) {
-        this.$patch((state) => {
+        this.$patch(state => {
           state.id = userStack.id;
-          state.items = userStack.items
-          state.keys = new Set(userStack.items.map(i => i.key))
+          state.items = userStack.items;
+          state.keys = new Set(userStack.items.map(i => i.key));
           state.name = userStack.name;
         });
       }
       else {
-        await db.stacks.add({
-          id: this.id,
-          user_id: this.user_id,
-          items: toRaw(this.items),
-          name: this.name,
-        });
+        try {
+          await db.stacks.add({
+            id: this.id,
+            user_id: userId,
+            name: 'Read',
+            items: [],
+            // items: toRaw(this.items),
+          });
+        } catch(error:any) {
+          console.error(`could not update state with new user info. ${error}`);
+          throw error;
+        }
       }
     },
 
     async addItem(item:Work) {
-      if (this.keys.size === 0) {
-        await requestPersistance();
-      }
       if (this.keys.has(item.key)) return;
 
       this.$patch((state) => {
@@ -61,6 +65,10 @@ export const useStacksStore = defineStore('stack', {
       return db.stacks.where('id').equals(this.id).modify(s => {
         s.items.splice(index, 1);
       });
+    },
+
+    logout() {
+      this.$reset();
     }
   },
 });

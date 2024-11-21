@@ -2,6 +2,9 @@
 
 export default defineNuxtConfig({
   ssr: false,
+  devServer: {
+    https: true
+  },
   devtools: {
     enabled: true,
 
@@ -9,7 +12,13 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
-  modules: ["@nuxt/ui", "@vite-pwa/nuxt", "@pinia/nuxt"],
+  modules: [
+    "@nuxt/ui",
+    "@vite-pwa/nuxt",
+    "@pinia/nuxt",
+    "@nuxt/image",
+    "@nuxtjs/tailwindcss",
+  ],
   compatibilityDate: "2024-10-25",
   imports: {
     autoImport: true,

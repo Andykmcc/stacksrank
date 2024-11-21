@@ -3,7 +3,6 @@
   <NuxtLoadingIndicator />
   <UContainer>
     <Account></Account>
-    <Search></Search>
-    <Stack></Stack>
+    <NuxtPage />
   </UContainer>
 </template>
