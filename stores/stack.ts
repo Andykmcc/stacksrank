@@ -1,5 +1,4 @@
 import { db, type Work, type User } from '../db';
-import {type DexieError } from 'dexie';
 import { toRaw } from 'vue';
 
 export const useStacksStore = defineStore('stack', {
@@ -25,18 +24,12 @@ export const useStacksStore = defineStore('stack', {
         });
       }
       else {
-        try {
-          await db.stacks.add({
-            id: this.id,
-            user_id: userId,
-            name: 'Read',
-            items: [],
-            // items: toRaw(this.items),
-          });
-        } catch(error:any) {
-          console.error(`could not update state with new user info. ${error}`);
-          throw error;
-        }
+        await db.stacks.add({
+          id: this.id,
+          user_id: userId,
+          name: 'Read',
+          items: toRaw(this.items),
+        });
       }
     },
 

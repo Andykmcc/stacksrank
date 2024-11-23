@@ -23,7 +23,7 @@
   } catch (error) {
     console.error(`could not update stackstore from storage ${error}`);
   }
-  
+
   userStore.$onAction(({name}) => {
     switch (name) {
       case 'logout':

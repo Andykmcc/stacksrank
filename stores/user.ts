@@ -1,31 +1,20 @@
 import { db, type User } from "../db";
 import { toRaw } from 'vue';
 
-const unregisteredId = "00000000-0000-4000-9800-000000000000";
+export const unregisteredId = "00000000-0000-4000-9800-000000000000";
+const localStorageKey = 'stacksrank-currentUserId';
 
 export const useUsersStore = defineStore('user', {
   state: () => {
-    const storedUser = localStorage.getItem('stacksrank-currentUser');
-
-    if (storedUser) {
-      try {
-        return JSON.parse(storedUser) as User;
-      } catch (error) {
-        console.warn(`could not parse stored current user.`);
-        localStorage.removeItem('stacksrank-currentUser');
-      }
-    }
-
-    const newUser = <User>{
+    return <User>{
       id: unregisteredId,
       firstName: '',
       lastName: '',
-    }
-    localStorage.setItem('stacksrank-currentUser', JSON.stringify(newUser));
-    return newUser;
+      defaultStackId: unregisteredId,
+    };
   },
   getters: {
-    registered: state => {
+    isRegistered: state => {
       return state.id !== unregisteredId;
     },
     unregisteredUserId: () => {
@@ -33,6 +22,38 @@ export const useUsersStore = defineStore('user', {
     }
   },
   actions: {
+    async fetchStoredUser() {
+      const storedUserId = localStorage.getItem(localStorageKey) as User['id'] | null;
+
+      if (storedUserId) {
+        try {
+          const storedUser = await db.users.get(storedUserId);
+          if (storedUser) {
+            this.id = storedUser.id;
+            this.firstName = storedUser.firstName;
+            this.lastName = storedUser.lastName;
+            this.defaultStackId = storedUser.defaultStackId;
+            return;
+          }
+        } catch (error) {
+          console.warn(`could not parse stored current user.`);
+          localStorage.removeItem(localStorageKey);
+        }
+      }
+
+      const newUser = <User>{
+        id: unregisteredId,
+        firstName: '',
+        lastName: '',
+        defaultStackId: unregisteredId,
+      }
+      localStorage.setItem(localStorageKey, JSON.stringify(newUser.id));
+      await db.users.put(newUser);
+      this.id = newUser.id;
+      this.firstName = newUser.firstName;
+      this.lastName = newUser.lastName;
+      this.defaultStackId = newUser.defaultStackId;
+    },
     async createUser(userFormData:User) {
       // create the users unique ID
       const newUserId = self.crypto.randomUUID();
@@ -46,7 +67,7 @@ export const useUsersStore = defineStore('user', {
       
       try {
         // update the "current user" ref in localstorage
-        localStorage.setItem('stacksrank-currentUser', JSON.stringify({
+        localStorage.setItem(localStorageKey, JSON.stringify({
           id: newUserId,
         }));
       } catch (error) {
@@ -66,25 +87,18 @@ export const useUsersStore = defineStore('user', {
         throw error
       }
     },
-    async updateFromStore() {
-      const storedUser = await db.users.get(this.id);
-      if (!storedUser) return;
-      this.firstName = storedUser.firstName;
-      this.lastName = storedUser.lastName;
-    },
     login(user:User) {
-      localStorage.setItem('stacksrank-currentUser', JSON.stringify({
-        id: user.id,
-      }));
+      localStorage.setItem(localStorageKey, user.id);
       this.$patch({
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
+        defaultStackId: user.defaultStackId,
       });
     },
 
     logout() {
-      localStorage.removeItem('stacksrank-currentUser');
+      localStorage.removeItem(localStorageKey);
       this.$reset();
     }
   }

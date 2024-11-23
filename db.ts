@@ -2,17 +2,18 @@
 import Dexie, { type EntityTable } from 'dexie';
 import { z } from 'zod';
 
-const uuid = z.custom<`${string}-${string}-${string}-${string}-${string}`>(val => {
-  const x =  typeof val === "string" ? /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(val) : false;
-  console.log(x, val);
-  return x;
-});
+Dexie.debug = true;
+
+const uuid = z.custom<`${string}-${string}-${string}-${string}-${string}`>(val => 
+  typeof val === "string" ? /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(val) : false
+);
 export type Uuid = z.infer<typeof uuid>; // `${string}-${string}-${string}-${string}-${string}`
 
 export const userSchema = z.object({
   id: uuid,
   firstName: z.string().trim().optional(),
   lastName: z.string().trim().optional(),
+  defaultStackId: uuid.optional(),
 });
 export type User = z.output<typeof userSchema>
 
