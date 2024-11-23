@@ -1,12 +1,12 @@
 import { db, type Work, type User } from '../db';
 import { toRaw } from 'vue';
+import { unregisteredId } from './user';
 
 export const useStacksStore = defineStore('stack', {
   state: () => {
-    const currentUser = useUsersStore();
     return {
       id: self.crypto.randomUUID(),
-      user_id: currentUser.id,
+      user_id: unregisteredId,
       name: 'Read',
       items: <Work[]>[],
       keys: new Set<string>(),
@@ -14,23 +14,27 @@ export const useStacksStore = defineStore('stack', {
   },
   actions: {
     async updateStackFromStorage(userId:User['id']) {
-      const userStack = await db.stacks.where({'user_id': userId}).first();
-      if (userStack) {
+      const userStacks = await db.stacks.where({'user_id': userId}).first();
+      if (userStacks) {
         this.$patch(state => {
-          state.id = userStack.id;
-          state.items = userStack.items;
-          state.keys = new Set(userStack.items.map(i => i.key));
-          state.name = userStack.name;
+          state.id = userStacks.id;
+          state.items = userStacks.items;
+          state.keys = new Set(userStacks.items.map(i => i.key));
+          state.name = userStacks.name;
         });
       }
-      else {
-        await db.stacks.add({
-          id: this.id,
-          user_id: userId,
-          name: 'Read',
-          items: toRaw(this.items),
-        });
-      }
+    },
+
+    async create(user:User) {
+      await db.stacks.add({
+        id: this.id,
+        user_id: user.id,
+        name: this.name,
+        items: toRaw(this.items),
+      });
+      this.$patch({
+        user_id: user.id,
+      });
     },
 
     async addItem(item:Work) {
@@ -40,12 +44,7 @@ export const useStacksStore = defineStore('stack', {
         state.keys.add(item.key);
         state.items.unshift(item);
       });
-      try {
-        await db.stacks.where('id').equals(this.id).modify(s => {s.items.unshift(toRaw(item))});
-      }
-      catch (error) {
-        console.error(error);
-      }
+      await db.stacks.where('id').equals(this.id).modify(s => {s.items.unshift(toRaw(item))});
     },
 
     async updateRank(indexFrom:number, indexTo:number) {
@@ -55,9 +54,7 @@ export const useStacksStore = defineStore('stack', {
     },
 
     async removeItem(index:number) {
-      return db.stacks.where('id').equals(this.id).modify(s => {
-        s.items.splice(index, 1);
-      });
+      return db.stacks.where('id').equals(this.id).modify(s => {s.items.splice(index, 1)});
     },
 
     logout() {

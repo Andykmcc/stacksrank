@@ -79,7 +79,6 @@
   function callIfTruthy(func:Function, ...args:any[]) {
     return async (...args:any[]) => {
       if (args[0]) {
-        console.log(...args);
         return func(...args);
       }
     }

@@ -18,11 +18,11 @@
   const userStore = useUsersStore();
   const stackStore = useStacksStore();
   
-  try {
-    await stackStore.updateStackFromStorage(userStore.id);
-  } catch (error) {
-    console.error(`could not update stackstore from storage ${error}`);
-  }
+  // try {
+  //   await stackStore.updateStackFromStorage(userStore.id);
+  // } catch (error) {
+  //   console.error(`could not update stackstore from storage ${error}`);
+  // }
 
   userStore.$onAction(({name}) => {
     switch (name) {

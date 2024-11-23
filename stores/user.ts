@@ -17,7 +17,7 @@ export const useUsersStore = defineStore('user', {
     isRegistered: state => {
       return state.id !== unregisteredId;
     },
-    unregisteredUserId: () => {
+    unregisteredId: () => {
       return unregisteredId;
     }
   },
@@ -41,52 +41,30 @@ export const useUsersStore = defineStore('user', {
         }
       }
 
-      const newUser = <User>{
-        id: unregisteredId,
-        firstName: '',
-        lastName: '',
-        defaultStackId: unregisteredId,
-      }
-      localStorage.setItem(localStorageKey, JSON.stringify(newUser.id));
-      await db.users.put(newUser);
-      this.id = newUser.id;
-      this.firstName = newUser.firstName;
-      this.lastName = newUser.lastName;
-      this.defaultStackId = newUser.defaultStackId;
+      await db.users.put({
+        id: this.id,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        defaultStackId: this.defaultStackId,
+      });
+      localStorage.setItem(localStorageKey, this.id);
     },
+    
     async createUser(userFormData:User) {
       // create the users unique ID
       const newUserId = self.crypto.randomUUID();
       // save new users to DB
-      try {
-        await db.users.add({...toRaw(userFormData), ...{id: newUserId}});
-      } catch (error) {
-        console.error(`could not save new used to DB. ${error}`);
-        throw error;
-      }
-      
-      try {
-        // update the "current user" ref in localstorage
-        localStorage.setItem(localStorageKey, JSON.stringify({
-          id: newUserId,
-        }));
-      } catch (error) {
-        console.error(`could not update localstorage with current user. ${error}`);
-        throw error;
-      }
-      
-      try {
-        // update the pinia store with new user data
-        this.$patch({
-          id: newUserId,
-          firstName: userFormData.firstName,
-          lastName: userFormData.lastName,
-        });
-      } catch (error) {
-        console.error(`could not reset UserStore, ${error}`);
-        throw error
-      }
+      await db.users.add({...toRaw(userFormData), ...{id: newUserId}});
+      // update the "current user" ref in localstorage
+      localStorage.setItem(localStorageKey, newUserId);
+      // update the pinia store with new user data
+      this.$patch({
+        id: newUserId,
+        firstName: userFormData.firstName,
+        lastName: userFormData.lastName,
+      });
     },
+    
     login(user:User) {
       localStorage.setItem(localStorageKey, user.id);
       this.$patch({
@@ -98,8 +76,7 @@ export const useUsersStore = defineStore('user', {
     },
 
     logout() {
-      localStorage.removeItem(localStorageKey);
-      this.$reset();
+      localStorage.setItem(localStorageKey, unregisteredId);
     }
   }
 })

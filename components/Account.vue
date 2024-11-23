@@ -25,7 +25,5 @@
 
 <script lang="ts" setup>
 const currentUser = useUsersStore();
-if (currentUser.isRegistered) {
-  await currentUser.fetchStoredUser();
-}
+await currentUser.fetchStoredUser();
 </script>
