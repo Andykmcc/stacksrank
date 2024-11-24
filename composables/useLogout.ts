@@ -1,8 +1,9 @@
-export function useLogout() {
+export async function useLogout() {
   const currentUser = useUsersStore();
+  const currentStack = useStacksStore();
+  
   currentUser.logout();
+  currentStack.logout();
 
-  reloadNuxtApp({
-    path: '/',
-  });
+  await navigateTo('/');
 }

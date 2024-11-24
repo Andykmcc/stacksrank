@@ -85,6 +85,7 @@ export const useUsersStore = defineStore('user', {
 
     logout() {
       localStorage.setItem(localStorageKey, unregisteredId);
+      this.$reset();
     }
   }
 })

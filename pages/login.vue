@@ -14,6 +14,10 @@
         </template>
       </UCard>
     </li>
+    <li v-if="!users.length">
+      <p>No users yet.</p>
+      <UButton to="/register">Create Account</UButton>
+    </li>
   </ul>
 </template>
 
