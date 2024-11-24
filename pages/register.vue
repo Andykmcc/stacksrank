@@ -46,9 +46,7 @@ async function onSubmit(event: FormSubmitEvent<User>) {
   try {
     await currentUser.createUser(event.data);
     await currentStack.create(currentUser);
-    currentUser.$patch({
-      defaultStackId: currentStack.id,
-    });
+    await currentUser.setDefaultStack(currentStack.id);
     await navigateTo('/');
   } catch (error) {
     console.log(`error creating new user. ${error}`);

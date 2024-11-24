@@ -5,13 +5,12 @@
         <template #header>
           <h2>{{ user.firstName }} {{ user.lastName }}</h2>
         </template>
-<!-- 
-        <ul>
-          <li v-for="stack in stacks">{{ stack.name }} - {{ stack.items.length }} items</li>
-        </ul> -->
-
+        <StackPreview :stack-id="user.defaultStackId" />
         <template #footer>
-          <UButton @click="onClick(user)">Login as {{ user.firstName }} {{ user.lastName }}</UButton>
+          <div class="flex">
+            <UButton class="ml-auto" @click="onClick(user)">Login as {{ user.firstName }} {{ user.lastName }}</UButton>
+          </div>
+          
         </template>
       </UCard>
     </li>
@@ -19,11 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { db, type User, type Stack } from '../db';
+import { db, type User } from '../db';
+
 const currentUser = useUsersStore();
 
 const users = ref(<User[]>[]);
-users.value = await db.users.toArray();
+users.value = await db.users.where('id').notEqual(currentUser.unregisteredId).toArray();
 
 async function onClick(user:User) {
   currentUser.login(user);

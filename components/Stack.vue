@@ -17,22 +17,8 @@
   
   const userStore = useUsersStore();
   const stackStore = useStacksStore();
-  
-  // try {
-  //   await stackStore.updateStackFromStorage(userStore.id);
-  // } catch (error) {
-  //   console.error(`could not update stackstore from storage ${error}`);
-  // }
 
-  userStore.$onAction(({name}) => {
-    switch (name) {
-      case 'logout':
-        stackStore.$reset();
-        break;
-      default:
-        return;
-    }
-  });
+  await stackStore.updateStackFromStorage(userStore.id);
 
   async function onUpdate(e:SortableEvent) {
     // handles re-ranking of existing items
