@@ -2,7 +2,7 @@
   <NuxtPwaManifest />
   <NuxtLoadingIndicator />
   <UContainer>
-    <Account></Account>
+    <Header></Header>
     <NuxtPage />
   </UContainer>
 </template>

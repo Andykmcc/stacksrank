@@ -5,11 +5,14 @@
         onUpdate,
       }
     ]">
-    <li class="flex items-center text-nowrap cursor-grab active:cursor-grabbing py-2" v-if="stackStore" v-for="(work, index) in stackStore.items" :key="work.key">
+    <li class="flex items-center text-nowrap cursor-grab active:cursor-grabbing py-2" v-for="(work, index) in stackStore.items" :key="work.key">
       <span class="font-semibold truncate">{{ work.title }}</span><span class="truncate text-sm italic">&nbsp{{ work.author_name[0] }}</span>
       <UButton class="align-middle ml-auto" icon="i-heroicons-x-circle-16-solid" size="2xs" square @click="remove(index)"/>
     </li>
   </ol>
+  <div v-if="stackStore.items.length === 0">
+    <p>No items in this stack. Try adding something.</p>
+  </div>
 </template>
 
 <script setup lang="ts">
