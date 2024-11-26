@@ -24,7 +24,7 @@ import { type User, userSchema } from '../db';
 import { watch } from 'vue';
 
 const currentUser = useUsersStore();
-const currentStack = useStacksStore();
+const currentStacks = useStacksStore();
 
 const state = reactive({
   id: currentUser.id,
@@ -45,8 +45,7 @@ watch(persistRef, async (newState, oldState) => {
 async function onSubmit(event: FormSubmitEvent<User>) {
   try {
     await currentUser.createUser(event.data);
-    await currentStack.create(currentUser);
-    await currentUser.setDefaultStack(currentStack.id);
+    await currentStacks.moveGeneralStackToUser('To Read', currentUser.id, currentStacks.list[0].items);
     await navigateTo('/');
   } catch (error) {
     console.log(`error creating new user. ${error}`);

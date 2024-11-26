@@ -33,28 +33,27 @@
 
 <script lang="ts" setup>
 const currentUser = useUsersStore();
-await currentUser.fetchStoredUser();
 const menuItems = ref([
-    [{
-      label: `${currentUser.firstName} ${currentUser.lastName}`,
-      slot: 'account',
-      disabled: true,
-    }],
-    [{
-      label: 'Create Stack',
-      icon: 'i-heroicons-book-open',
-      click: () => navigateTo('/stack-create')
-    }],
-    [{
-      label: 'Sign out',
-      icon: 'i-heroicons-arrow-left-on-rectangle',
-      click: useLogout,
-    }],
-  ]);
+  [{
+    label: `${currentUser.firstName} ${currentUser.lastName}`,
+    slot: 'account',
+    disabled: true,
+  }],
+  [{
+    label: 'Create Stack',
+    icon: 'i-heroicons-book-open',
+    click: () => navigateTo('/stack-create')
+  }],
+  [{
+    label: 'Sign out',
+    icon: 'i-heroicons-arrow-left-on-rectangle',
+    click: useLogout,
+  }],
+]);
 
+await currentUser.fetchStoredUser();
 currentUser.$subscribe((mutation, state) => {
   // update name in menu when user changes
   menuItems.value[0][0].label = `${state.firstName} ${state.lastName}`;
 });
-
 </script>

@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-  import { type Work, } from "../db";
+  import { type Work } from "../db";
   import { watch } from 'vue';
 
   export type OpenLibrarySearchResult = {
@@ -55,8 +55,8 @@
   };
 
   const userStore = useUsersStore();
-  const stackStore = useStacksStore();
-
+  const stacksStore = useStacksStore();
+  
   async function search(q: string) {
     if (query.value !== '') {
       try {
@@ -76,16 +76,12 @@
     return [];
   }
 
-  function callIfTruthy(func:Function, ...args:any[]) {
-    return async (...args:any[]) => {
-      if (args[0]) {
-        return func(...args);
-      }
+  watch(selected, async (work) => {
+    if (work) {
+      await stacksStore.addItemToStack(work);
     }
-  }
+  });
 
-  watch(selected, callIfTruthy(stackStore.addItem));
-  
   userStore.$onAction(({name}) => {
     switch(name) {
       case 'logout':

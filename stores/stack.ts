@@ -2,7 +2,7 @@ import { db, type Work, type User } from '../db';
 import { toRaw } from 'vue';
 import { unregisteredId } from './user';
 
-export const useStacksStore = defineStore('stack', {
+export const useStackStore = defineStore('stack', {
   state: () => {
     return {
       id: self.crypto.randomUUID(),

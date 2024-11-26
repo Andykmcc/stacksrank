@@ -13,15 +13,18 @@ import { db, type User, type Stack } from '../db';
 import { type PropType } from "vue";
 
 const props = defineProps({
-  stackId: {
-    type: String as PropType<User['defaultStackId']>,
+  userId: {
+    type: String as PropType<User['id']>,
   },
 });
 
 const stack = ref(<Stack>{});
 
-if (props.stackId) {
-  const usersDefaultStack = await db.stacks.get(props.stackId);
+if (props.userId) {
+  const usersDefaultStack = await db.stacks.where('user_id').equals(props.userId).filter(s => s.isDefault).first();
+  if (usersDefaultStack) {
+    stack.value = usersDefaultStack;
+  }
   stack.value = usersDefaultStack ? usersDefaultStack : <Stack>{};
 }
 

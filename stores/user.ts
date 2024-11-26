@@ -1,25 +1,20 @@
-import { db, type User, type Stack } from "../db";
+import { db, type User, type Stack, uuid} from "../db";
 import { toRaw } from 'vue';
 
-export const unregisteredId = "00000000-0000-4000-9800-000000000000";
 const localStorageKey = 'stacksrank-currentUserId';
 
 export const useUsersStore = defineStore('user', {
   state: () => {
     return <User>{
-      id: unregisteredId,
+      id: uuid.parse(undefined), // returns the default UUID defined in db.ts
       firstName: '',
       lastName: '',
-      defaultStackId: unregisteredId,
     };
   },
   getters: {
     isRegistered: state => {
-      return state.id !== unregisteredId;
+      return state.id !== uuid.parse(undefined);
     },
-    unregisteredId: () => {
-      return unregisteredId;
-    }
   },
   actions: {
     async fetchStoredUser() {
@@ -32,7 +27,6 @@ export const useUsersStore = defineStore('user', {
             this.id = storedUser.id;
             this.firstName = storedUser.firstName;
             this.lastName = storedUser.lastName;
-            this.defaultStackId = storedUser.defaultStackId;
             return;
           }
         } catch (error) {
@@ -45,7 +39,6 @@ export const useUsersStore = defineStore('user', {
         id: this.id,
         firstName: this.firstName,
         lastName: this.lastName,
-        defaultStackId: this.defaultStackId,
       });
       localStorage.setItem(localStorageKey, this.id);
     },
@@ -64,13 +57,6 @@ export const useUsersStore = defineStore('user', {
         lastName: userFormData.lastName,
       });
     },
-    
-    async setDefaultStack(stackId:Stack['id']) {
-      await db.users.update(this.id, {defaultStackId: stackId});
-      this.$patch({
-        defaultStackId: stackId,
-      });
-    },
 
     login(user:User) {
       localStorage.setItem(localStorageKey, user.id);
@@ -78,13 +64,12 @@ export const useUsersStore = defineStore('user', {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
-        defaultStackId: user.defaultStackId,
       });
       return this;
     },
 
     logout() {
-      localStorage.setItem(localStorageKey, unregisteredId);
+      localStorage.setItem(localStorageKey, uuid.parse(undefined));
       this.$reset();
     }
   }

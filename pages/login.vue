@@ -5,7 +5,7 @@
         <template #header>
           <h2>{{ user.firstName }} {{ user.lastName }}</h2>
         </template>
-        <StackPreview :stack-id="user.defaultStackId" />
+        <StackPreview :user-id=user.id />
         <template #footer>
           <div class="flex">
             <UButton class="ml-auto" @click="onClick(user)">Login as {{ user.firstName }} {{ user.lastName }}</UButton>
@@ -22,12 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import { db, type User } from '../db';
+import { db, type User, uuid } from '../db';
 
 const currentUser = useUsersStore();
 
 const users = ref(<User[]>[]);
-users.value = await db.users.where('id').notEqual(currentUser.unregisteredId).toArray();
+users.value = await db.users.where('id').notEqual(uuid.parse(undefined)).toArray();
 
 async function onClick(user:User) {
   currentUser.login(user);

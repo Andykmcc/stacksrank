@@ -1,9 +1,9 @@
 export async function useLogout() {
   const currentUser = useUsersStore();
-  const currentStack = useStacksStore();
+  const currentStacks = useStacksStore();
   
   currentUser.logout();
-  currentStack.logout();
+  currentStacks.logout();
 
   await navigateTo('/');
 }

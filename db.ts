@@ -1,19 +1,18 @@
 // db.js
 import Dexie, { type EntityTable } from 'dexie';
-import { z } from 'zod';
+import { boolean, z } from 'zod';
 
 Dexie.debug = true;
 
-const uuid = z.custom<`${string}-${string}-${string}-${string}-${string}`>(val => 
+export const uuid = z.custom<`${string}-${string}-${string}-${string}-${string}`>(val => 
   typeof val === "string" ? /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(val) : false
-);
+).default("00000000-0000-4000-9800-000000000000");
 export type Uuid = z.infer<typeof uuid>; // `${string}-${string}-${string}-${string}-${string}`
 
 export const userSchema = z.object({
   id: uuid,
   firstName: z.string().trim().optional(),
   lastName: z.string().trim().optional(),
-  defaultStackId: uuid.optional(),
 });
 export type User = z.output<typeof userSchema>
 
@@ -29,6 +28,7 @@ export type Work = z.output<typeof workSchema>;
 export const stackSchema = z.object({
   id: uuid,
   user_id: uuid,
+  isDefault: z.boolean().default(false),
   name: z.string(),
   items: z.array(workSchema),
 });
