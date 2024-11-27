@@ -18,7 +18,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '#ui/types';
 import { db, type Stack, stackSchema } from '../db';
-import { toRaw } from 'vue';
 
 const currentUser = useUsersStore();
 const currentStacks = useStacksStore();

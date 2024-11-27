@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center my-2">
     <ULink to="/">
-      <NuxtImg 
-        src="pwa-512x512.png" 
+      <NuxtImg
+        src="pwa-512x512.png"
         alt="Stacks Rank logo"
         loading="lazy"
         height="50"
@@ -41,8 +41,13 @@ const menuItems = ref([
   }],
   [{
     label: 'Create Stack',
-    icon: 'i-heroicons-book-open',
+    icon: 'i-heroicons-plus-circle',
     click: () => navigateTo('/stack-create')
+  },
+  {
+    label: 'Manage Stacks',
+    icon: 'i-heroicons-bars-4',
+    click: () => navigateTo('/manage-stacks')
   }],
   [{
     label: 'Sign out',

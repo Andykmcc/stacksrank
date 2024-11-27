@@ -1,4 +1,5 @@
 import { db, type User, type Stack, type Work, uuid } from '../db';
+import { toRaw } from 'vue';
 
 export const useStacksStore = defineStore('stacks', {
   state: () => {
@@ -15,7 +16,7 @@ export const useStacksStore = defineStore('stacks', {
   actions: {
     async getByUser(userId:User['id']) {
       await db.transaction('rw', [db.stacks], async () => {
-        const stacks = await db.stacks.where('user_id').equals(userId).reverse().sortBy('isDefault');
+        const stacks = await db.stacks.where('user_id').equals(userId).toArray();
         // non-logged in user
         // logged in user
         if (stacks.length) {
@@ -64,7 +65,7 @@ export const useStacksStore = defineStore('stacks', {
 
     async setDefaultStack(userId:User['id'], stackId:Stack['id']) {
       await db.transaction('rw', db.stacks, async () => {
-        await db.stacks.where(['user_id']).equals(userId).modify(s => s.isDefault = false);
+        await db.stacks.where({user_id: userId}).modify({isDefault: false});
         await db.stacks.update(stackId, {isDefault: true});
       });
       this.$patch((stackState) => {
@@ -108,6 +109,10 @@ export const useStacksStore = defineStore('stacks', {
       return db.stacks.where('id').equals(stackId).modify(s => {
         [s.items[indexFrom], s.items[indexTo]] = [s.items[indexTo], s.items[indexFrom]];
       });
+    },
+
+    async setStackList(stackId:Stack['id'], items:Work[]) {
+      return db.stacks.update(stackId, {items: toRaw(items)});
     },
 
     async removeItem(stackId:Stack['id'], index:number) {

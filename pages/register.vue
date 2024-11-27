@@ -1,4 +1,5 @@
 <template>
+  <h1 class="text-2xl mb-4">Create Account</h1>
   <UForm :schema="userSchema" :state="state" class="space-y-4" @submit="onSubmit">
     <UFormGroup label="First Name" name="firstName">
       <UInput v-model="state.firstName" required autocomplete="off"/>
@@ -7,7 +8,7 @@
     <UFormGroup label="Last Name" name="lastName">
       <UInput v-model="state.lastName" required autocomplete="off"/>
     </UFormGroup>
-    
+
     <UFormGroup label="Save" name="save" description="Select this to prevent your device from ereasing your stacks.">
       <UToggle v-model="persistRef" :disabled="persistRef"/>
     </UFormGroup>

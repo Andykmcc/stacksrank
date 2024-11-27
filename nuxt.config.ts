@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/tailwindcss",
   ],
+  ui: {
+    safelistColors: ['scarlet']
+  },
   compatibilityDate: "2024-10-25",
   imports: {
     autoImport: true,
