@@ -57,6 +57,23 @@
   const userStore = useUsersStore();
   const stacksStore = useStacksStore();
   
+  watch(selected, async (work) => {
+    if (work) {
+      await stacksStore.addItemToStack(work);
+    }
+  });
+
+  userStore.$onAction(({name}) => {
+    switch(name) {
+      case 'logout':
+        selected.value = undefined;
+        query.value = '';
+        break;
+      default:
+        break;
+    }
+  });
+  
   async function search(q: string) {
     if (query.value !== '') {
       try {
@@ -75,21 +92,4 @@
     }
     return [];
   }
-
-  watch(selected, async (work) => {
-    if (work) {
-      await stacksStore.addItemToStack(work);
-    }
-  });
-
-  userStore.$onAction(({name}) => {
-    switch(name) {
-      case 'logout':
-        selected.value = undefined;
-        query.value = '';
-        break;
-      default:
-        break;
-    }
-  });
 </script>

@@ -27,6 +27,7 @@ import { db, type User, uuid } from '../db';
 const currentUser = useUsersStore();
 
 const users = ref(<User[]>[]);
+
 users.value = await db.users.where('id').notEqual(uuid.parse(undefined)).toArray();
 
 async function onClick(user:User) {

@@ -27,5 +27,4 @@ if (props.userId) {
   }
   stack.value = usersDefaultStack ? usersDefaultStack : <Stack>{};
 }
-
 </script>

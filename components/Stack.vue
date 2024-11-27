@@ -25,7 +25,6 @@
   import { vDraggable, type SortableEvent } from 'vue-draggable-plus';
   import { type Stack } from '../db';
   
-
   const userStore = useUsersStore();
   const stacksStore = useStacksStore();
 
