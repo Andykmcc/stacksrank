@@ -73,7 +73,9 @@
         break;
     }
   });
-  
+
+  await stacksStore.getByUser(userStore.id)
+
   async function search(q: string) {
     if (query.value !== '') {
       try {

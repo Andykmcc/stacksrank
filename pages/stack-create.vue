@@ -6,7 +6,7 @@
     </UFormGroup>
 
     <UFormGroup label="Set as default stack" name="default">
-      <UToggle v-model="state.default" />
+      <UToggle v-model="state.isDefault" />
     </UFormGroup>
 
     <UButton type="submit" value="Create">
@@ -21,23 +21,19 @@ import { db, type Stack, stackSchema } from '../db';
 import { toRaw } from 'vue';
 
 const currentUser = useUsersStore();
+const currentStacks = useStacksStore();
 
 const state = reactive({
   id: self.crypto.randomUUID(),
   user_id: currentUser.id,
   name: '',
-  default: false,
+  isDefault: false,
   items: [],
 });
 
 async function onSubmit(event: FormSubmitEvent<Stack>) {
   try {
-    await db.stacks.add(toRaw(event.data));
-    if (state.default) {
-      currentUser.$patch({
-        defaultStackId: event.data.id,
-      });
-    }
+    await currentStacks.create(event.data.name, currentUser.id, event.data.isDefault);
     await navigateTo('/');
   } catch (error) {
     console.error(error);

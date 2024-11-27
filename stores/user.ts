@@ -19,7 +19,10 @@ export const useUsersStore = defineStore('user', {
   actions: {
     async fetchStoredUser() {
       const storedUserId = localStorage.getItem(localStorageKey) as User['id'] | null;
+      // non-logged in user
+      if (storedUserId === uuid.parse(undefined)) return;
 
+      // logged in user
       if (storedUserId) {
         try {
           const storedUser = await db.users.get(storedUserId);
@@ -37,6 +40,7 @@ export const useUsersStore = defineStore('user', {
         }
       }
 
+      // first time visit
       await db.users.put({
         id: this.id,
         firstName: this.firstName,
