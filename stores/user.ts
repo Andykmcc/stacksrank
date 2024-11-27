@@ -24,9 +24,11 @@ export const useUsersStore = defineStore('user', {
         try {
           const storedUser = await db.users.get(storedUserId);
           if (storedUser) {
-            this.id = storedUser.id;
-            this.firstName = storedUser.firstName;
-            this.lastName = storedUser.lastName;
+            this.$patch({
+              id: storedUser.id,
+              firstName: storedUser.firstName,
+              lastName: storedUser.lastName,
+            });
             return;
           }
         } catch (error) {

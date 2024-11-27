@@ -27,15 +27,13 @@
   
 
   const userStore = useUsersStore();
-  await userStore.fetchStoredUser();
   const stacksStore = useStacksStore();
 
-  await stacksStore.getByUser(userStore.id);
-
   userStore.$subscribe(async (mutate, userState) => {
-    console.count('userStore.$subscribe');
     await stacksStore.getByUser(userState.id);
   });
+
+  await stacksStore.getByUser(userStore.id);
 
   async function onUpdate(stackId:Stack['id'], e:SortableEvent) {
     // handles re-ranking of existing items

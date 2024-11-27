@@ -51,9 +51,10 @@ const menuItems = ref([
   }],
 ]);
 
-await currentUser.fetchStoredUser();
 currentUser.$subscribe((mutation, state) => {
   // update name in menu when user changes
   menuItems.value[0][0].label = `${state.firstName} ${state.lastName}`;
 });
+
+await currentUser.fetchStoredUser();
 </script>
