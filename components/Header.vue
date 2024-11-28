@@ -2,7 +2,7 @@
   <div class="flex items-center my-2">
     <ULink to="/">
       <NuxtImg
-        src="pwa-512x512.png"
+        src="/pwa-192x192.png"
         alt="Stacks Rank logo"
         loading="lazy"
         height="50"
