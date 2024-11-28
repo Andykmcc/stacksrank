@@ -2,6 +2,13 @@
 
 export default defineNuxtConfig({
   ssr: false,
+  nitro: {
+    prerender: {
+      routes: [
+        '/_ipx/s_100x100/pwa-192x192.png'
+      ]
+    }
+  },
   devServer: {
     https: true
   },
