@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover',
-      title: 'Stacks Rank'
+      title: 'Stacks Rank',
     }
   },
   ssr: false,
@@ -48,7 +48,7 @@ export default defineNuxtConfig({
       short_name:'Stacks Rank',
       description:'Rank your books',
       display: "standalone",
-      theme_color: "#000000",
+      theme_color: "#ffffff",
       background_color: "#ffffff",
       lang:'en',
       orientation:'portrait',
