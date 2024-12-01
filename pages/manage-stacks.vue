@@ -4,7 +4,7 @@
   <UCard class="mb-4" v-for="stack in stacksStore.list" :key="stack.id">
     <template #header>
       <div class="flex">
-        <h2 class="text-lg font-semibold">{{ stack.name }}</h2>
+        <h2 class="text-xl font-semibold">{{ stack.name }}</h2>
         <UTooltip class="ml-auto" :text="(stack.isDefault) ? 'Current Default' : 'Make default'" :popper="{ placement: 'top' }">
           <UButton
             icon="i-heroicons-star-solid"
@@ -22,7 +22,7 @@
 
     <ol>
       <li class="flex items-center text-nowrap py-1" v-for="work in stack.items.slice(0,3)" :key="work.key">
-        <span class="font-semibold truncate">{{ work.title }}</span><span class="truncate text-sm italic">&nbsp{{ work.author_name[0] }}</span>
+        <span class="font-semibold truncate">{{ work.title }}</span><span class="truncate text-md italic">&nbsp{{ work.author_name[0] }}</span>
       </li>
       <div v-if="stack.items.length === 0">
         <p>Nothing in your <span class="font-bold">{{ stack.name }}</span> stack yet.</p>

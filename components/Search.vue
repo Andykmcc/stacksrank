@@ -15,6 +15,7 @@
     name="search"
     by="key"
     class="mb-2"
+    size="lg"
   >
     <template #option="{ option: book }">
       <span class="font-semibold truncate">{{ book.title }}</span>
@@ -56,7 +57,7 @@
 
   const userStore = useUsersStore();
   const stacksStore = useStacksStore();
-  
+
   watch(selected, async (work) => {
     if (work) {
       await stacksStore.addItemToStack(work);
@@ -80,7 +81,7 @@
     if (query.value !== '') {
       try {
         loading.value = true
-        const books: OpenLibrarySearchResult = await $fetch('https://openlibrary.org/search.json', { 
+        const books: OpenLibrarySearchResult = await $fetch('https://openlibrary.org/search.json', {
           params: {
             q,
             ...defaultParams

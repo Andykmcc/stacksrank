@@ -1,6 +1,6 @@
 <template>
   <div v-for="stack in stacksStore.list.toSorted(sortDefaultStackToHead)" :key="stack.id">
-    <h2 class="text-lg font-semibold mb-2">{{ stack.name }}</h2>
+    <h2 class="text-xl font-semibold mb-2">{{ stack.name }}</h2>
     <ol v-draggable="[
       stack.items,
       {
@@ -11,7 +11,7 @@
       }
     ]">
       <li class="flex items-center text-nowrap cursor-grab active:cursor-grabbing py-1" v-for="(work, index) in stack.items" :key="work.key">
-        <span class="font-semibold truncate">{{ work.title }}</span><span class="truncate text-sm italic">&nbsp{{ work.author_name[0] }}</span>
+        <span class="font-semibold truncate">{{ work.title }}</span><span class="truncate text-md italic">&nbsp{{ work.author_name[0] }}</span>
         <UButton class="align-middle ml-auto" icon="i-heroicons-x-circle-16-solid" color="scarlet" variant="ghost" size="2xs" @click="remove(stack.id, index)"/>
       </li>
     </ol>

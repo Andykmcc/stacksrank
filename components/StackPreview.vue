@@ -1,8 +1,8 @@
 <template>
-  <h2 class="text-lg mb-4">{{ stack.name }}</h2>
+  <h2 class="text-xl mb-4">{{ stack.name }}</h2>
   <ol v-if="stack.items.length">
     <li v-for="work in stack.items.slice(0,3)">
-      <span class="font-semibold truncate">{{ work.title }}</span><span class="truncate text-sm italic">&nbsp{{ work.author_name[0] }}</span>
+      <span class="font-semibold truncate">{{ work.title }}</span><span class="truncate text-md italic">&nbsp{{ work.author_name[0] }}</span>
     </li>
   </ol>
   <span v-else>No items in this stack yet.</span>
