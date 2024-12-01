@@ -40,6 +40,9 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
+  colorMode: {
+    preference: 'light'
+  },
   pwa:{
     strategies: 'generateSW',
     registerType: 'prompt',
